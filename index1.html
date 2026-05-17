@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus in Malaysian Bioscience: Crop Biomass Growth</title>
+    <!-- Chart.js for visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #e8f5e9;
+            --secondary: #1565c0;
+            --text: #333;
+            --bg: #f8f9fa;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        h1 { color: var(--primary); margin: 0 0 10px 0; }
+        h2 { color: var(--secondary); margin-top: 25px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .meta-info {
+            font-size: 0.95rem;
+            color: #666;
+            font-style: italic;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        @media (min-width: 768px) {
+            .grid { grid-template-columns: 3fr 2fr; }
+        }
+        .card {
+            background: var(--primary-light);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary);
+        }
+        .formula-box {
+            background: #263238;
+            color: #eceff1;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .chart-container {
+            position: relative;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .interactive-panel {
+            background: #e3f2fd;
+            border-left: 5px solid var(--secondary);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .result-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        .hint {
+            font-size: 0.9rem;
+            color: #555;
+            background: #fff3e0;
+            padding: 10px;
+            border-left: 4px solid #ffb74d;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Application of Derivatives in Food Security & Agro-Bioscience</h1>
+        <p class="meta-info">Tailored for SFM: Food Security Undergraduate Curriculum (Malaysia)</p>
+    </header>
+
+    <div class="grid">
+        <!-- Left Column: Interactive Graph -->
+        <div>
+            <div class="hint">
+                💡 <strong>Interactive Feature:</strong> Click anywhere inside the chart area to pick a specific Month. The app will calculate the precise instantaneous growth rate $f'(x)$ at that point!
+            </div>
+            <div class="chart-container">
+                <canvas id="growthChart"></canvas>
+            </div>
+            
+            <div id="interactiveOutput" class="interactive-panel">
+                <h3>Interactive Calculus Reader</h3>
+                <p><em>Click on the graph above to feed data into the derivative engine...</em></p>
+            </div>
+        </div>
+
+        <!-- Right Column: Bioscience Scenario & Formulas -->
+        <div>
+            <h2>The Bioscience Scenario</h2>
+            <p>
+                In sustainable food security and agro-forestry setups across Malaysia, tracking vegetative biomass generation is a critical metric for predicting land optimization and canopy yield potential. 
+            </p>
+            <p>
+                This application simulates the growth of perennial crop variants on acidic Malaysian soils treated with specialized magnesium-rich structural fertilizers. Biomass volume accumulates slowly during early establishment, enters an exponential vegetative expansion phase, and levels off as it approaches canopy equilibrium.
+            </p>
+
+            <div class="card">
+                <strong>Data Source Context:</strong><br>
+                Modeled in accordance with mathematical growth trends derived from biological datasets published in:
+                <br><em>PLOS ONE Journal: "Mathematical modelling approach to understanding the effect of Mg-rich synthetic gypsum used as fertilizer on growth of Hevea brasiliensis in acid soils" (2025).</em>
+            </div>
+
+            <h2>Mathematical Modeling via Derivatives</h2>
+            <p>
+                To find the <strong>instantaneous growth rate</strong> of the crop biomass at any given moment, we apply differential calculus to a verified Logistic Growth Function.
+            </p>
+
+            <h3>1. The Population Function $f(x)$</h3>
+            <p>The total dry biomass weight (grams) over time $x$ (months after transplanting) is given by:</p>
+            <div class="formula-box">
+                f(x) = A / (1 + b * e^(-c * x))
+            </div>
+            <p><strong>Constants Used (Realistic Fit):</strong></p>
+            <ul>
+                <li><strong>A = 450.0</strong> (Asymptotic Maximum Dry Biomass in grams)</li>
+                <li><strong>b = 18.5</strong> (Initial scaling coefficient)</li>
+                <li><strong>c = 0.25</strong> (Specific biological growth rate factor)</li>
+            </ul>
+
+            <h3>2. The Derivative Function $f'(x)$</h3>
+            <p>By applying the <strong>Chain Rule</strong> and <strong>Quotient Rule</strong>, the first derivative representing the <em>instantaneous rate of biomass change (g/month)</em> simplifies to:</p>
+            <div class="formula-box">
+                f'(x) = (A * b * c * e^(-c * x)) / (1 + b * e^(-c * x))^2
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Constants matching empirical crop models 
+    const A = 450.0;
+    const b = 18.5;
+    const c = 0.25;
+
+    // 1. Math Functions
+    function f(x) {
+        return A / (1 + b * Math.exp(-c * x));
+    }
+
+    function f_prime(x) {
+        const numerator = A * b * c * Math.exp(-c * x);
+        const denominator = Math.pow(1 + b * Math.exp(-c * x), 2);
+        return numerator / denominator;
+    }
+
+    // 2. Generate Dataset for Months 0 to 36
+    const labels = [];
+    const biomassData = [];
+    const rateData = [];
+
+    for (let x = 0; x <= 36; x++) {
+        labels.push(x);
+        biomassData.push(f(x).toFixed(2));
+        rateData.push(f_prime(x).toFixed(2));
+    }
+
+    // 3. Render Chart.js
+    const ctx = document.getElementById('growthChart').getContext('2d');
+    const growthChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Total Accumulated Biomass f(x) [grams]',
+                    data: biomassData,
+                    borderColor: '#2e7d32',
+                    backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                    yAxisID: 'yBiomass',
+                    borderWidth: 3,
+                    tension: 0.2,
+                    fill: true
+                },
+                {
+                    label: "Instantaneous Growth Rate f'(x) [g/month]",
+                    data: rateData,
+                    borderColor: '#1565c0',
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    yAxisID: 'yRate',
+                    borderWidth: 2,
+                    tension: 0.2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Crop Development Analysis Matrix',
+                    font: { size: 16, weight: 'bold' }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart'
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Months After Transplanting (x)',
+                        font: { weight: 'bold' }
+                    }
+                },
+                yBiomass: {
+                    type: 'linear',
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Accumulated Dry Weight (g)',
+                        color: '#2e7d32',
+                        font: { weight: 'bold' }
+                    },
+                    min: 0,
+                    max: 500
+                },
+                yRate: {
+                    type: 'linear',
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Growth Velocity Rate (g/month)',
+                        color: '#1565c0',
+                        font: { weight: 'bold' }
+                    },
+                    min: 0,
+                    max: 35,
+                    grid: {
+                        drawOnChartArea: false // only want grid lines for one axis
+                    }
+                }
+            },
+            onClick: (e) => {
+                const points = growthChart.getElementsAtEventForMode(e, 'nearest', { intersect: false }, true);
+                if (points.length) {
+                    const firstPoint = points[0];
+                    const monthX = growthChart.data.labels[firstPoint.index];
+                    updateInteractiveEngine(monthX);
+                }
+            }
+        }
+    });
+
+    // 4. Interactive Logic Engine
+    function updateInteractiveEngine(month) {
+        const currentBiomass = f(month);
+        const currentRate = f_prime(month);
+        const outputDiv = document.getElementById('interactiveOutput');
+        
+        let laymanExplanation = "";
+        
+        if (month <= 6) {
+            laymanExplanation = "<strong>Establishment Phase:</strong> Growth rate is positive but low. The transplanted seedling is adjusting its root system to the new soil matrix and isn't packing on heavy mass yet.";
+        } else if (month > 6 && month <= 16) {
+            laymanExplanation = "<strong>Exponential Vegetative Surge:</strong> The derivative is spiking towards its peak! The plant is utilizing nutrients aggressively, rapidly generating thick leaf canopies and wood volume. This is your peak production efficiency window.";
+        } else if (month > 16 && month <= 24) {
+            laymanExplanation = "<strong>Inflection Slowdown:</strong> While total biomass is still increasing, the <em>rate of increase (the derivative)</em> is beginning to drop. The tree is shifting from rapid adolescent growth into mature maintenance.";
+        } else {
+            laymanExplanation = "<strong>Canopy Equilibrium Plateau:</strong> The derivative is approaching zero ($f'(x) \\approx 0$). The crop has maxed out its carrying capacity for this space. Biomass is stable, meaning any fertilizer additions now won't result in more vegetative growth.";
+        }
+
+        outputDiv.innerHTML = `
+            <h3>Calculus Analytics at Month ${month}</h3>
+            <table style="width:100%; border-collapse: collapse; margin-bottom: 15px;">
+                <tr>
+                    <td style="padding: 8px 0;"><strong>Current Weight $f(${month})$:</strong></td>
+                    <td class="result-value" style="text-align: right;">${currentBiomass.toFixed(2)} grams</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color:var(--secondary);"><strong>Instantaneous Rate $f'(${month})$:</strong></td>
+                    <td class="result-value" style="text-align: right; color:var(--secondary);">${currentRate.toFixed(2)} g / month</td>
+                </tr>
+            </table>
+            <div style="background: #fff; padding: 12px; border-radius: 6px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1)">
+                <strong>Food Security / Agronomist Interpretation:</strong><br>
+                ${laymanExplanation}
+            </div>
+        `;
+    }
+</script>
+
+</body>
+</html>
